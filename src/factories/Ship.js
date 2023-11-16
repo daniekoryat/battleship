@@ -1,31 +1,36 @@
 // Factory function to create a ship object
 /**
- * Creates a ship object with the specified length.
- * @param {number} length - The length of the ship.
- * @returns {object} - The ship object.
+ * Represents a ship object.
+ * @class
  */
-function createShip(length) {
-  let id = 0;
-  let coordinates = [];
+class Ship {
 
-  const isSunk = () => {
+  /**
+   * Creates a ship object with the specified length.
+   * @constructor
+   * @param {number} length - The length of the ship.
+   */
+  constructor(length) {
+    this.length = length;
+    this.hits = 0;
+    this.coordinates = [];
+  }
+  
+  /**
+   * Checks if the ship is sunk.
+   * @returns {boolean} - True if the ship is sunk, false otherwise.
+   */
+  isSunk() {
     return this.hits === this.length;
   }
   
-  return {
-    id: ++id,
-    length: length,
-    hits: 0,
-    coordinates: coordinates,
-    /**
-     * Increments the hit count of the ship and checks if it is sunk.
-     */
-    hit: function() {
-      this.hits++;
-      }
-    }
-  };
+  /**
+   * Increases the hit count of the ship.
+   */
+  hit() {
+    this.hits++;
+  }
+}
 
-
-// Exporting the factory function
-export default createShip;
+// Exporting the ship class
+export default Ship;
