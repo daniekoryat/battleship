@@ -10,7 +10,8 @@ class Ship {
    * @constructor
    * @param {number} length - The length of the ship.
    */
-  constructor(length) {
+  constructor(length,name) {
+    this.name = name
     this.length = length;
     this.hits = 0;
     this.coordinates = [];
