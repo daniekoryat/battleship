@@ -1,4 +1,4 @@
-export default shpis = [
+ const shpis = [
   {
     name: "Carrier",
     length: 5,
@@ -20,3 +20,5 @@ export default shpis = [
     length: 2,
   },
 ];
+
+export default shpis;

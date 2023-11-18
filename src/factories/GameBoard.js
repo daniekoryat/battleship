@@ -10,7 +10,6 @@ export default class GameBoard {
   constructor() {
     this.board = []; // The game board
     this.ships = []; // An array to store the ships
-    this.lengthValues = [5, 4, 3, 3, 2]; // The lengths of the ships
 
     // Create rows for the board+
     for (let i = 0; i < 10; i++) {
@@ -27,100 +26,122 @@ export default class GameBoard {
     }
   }
 
-
-/**
- * Place a ship on the game board.
- *
- * @param {object} ship - The ship object to be placed.
- * @param {number} x - The x-coordinate of the ship's placement.
- * @param {number} y - The y-coordinate of the ship's placement.
- * @param {string} orientation - The orientation of the ship ("horizontal" or "vertical").
- * @returns {boolean} - Returns true if the ship was successfully placed, false otherwise.
- */
- placeShip(ship, x, y, oriontation) {
-  // Check if the placement is valid (within the bounds of the board)
-  if (x < 0 || x >= 10 || y < 0 || y >= 10) {
-    console.error("Invalid placement coordinates.");
-    return false;
+  acsessCell(x, y) {
+    return this.board[x][y];
   }
 
-  // Check if there's enough space to place the ship based on its length and orientation
-  if (
-    (oriontation === "horizontal" && x + ship.length > 10) ||
-    (oriontation === "vertical" && y + ship.length > 10)
-  ) {
-    console.error("Not enough space to place the ship.");
-    return false;
-  }
-
-  // Check if there's already a ship at the specified coordinates
-  if (this.board[x][y].isContainShip) {
-    console.error("There's already a ship at the specified coordinates.");
-    return false;
-  }
-
-  // Place the ship on the board
-  for (let i = 0; i < ship.length; i++) {
-    if (oriontation === "horizontal") {
-      this.board[x + i][y].isContainShip = true;
-      ship.coordinates.push([x + i, y]);
-    } else {
-      this.board[x][y + i].isContainShip = true;
-      ship.coordinates.push([x, y + i]);
+  /**
+   * Place a ship on the game board.
+   *
+   * @param {object} ship - The ship object to be placed.
+   * @param {number} x - The x-coordinate of the ship's placement.
+   * @param {number} y - The y-coordinate of the ship's placement.
+   * @param {string} orientation - The orientation of the ship ("horizontal" or "vertical").
+   * @returns {boolean} - Returns true if the ship was successfully placed, false otherwise.
+   */
+  placeShip(ship, x, y, oriontation) {
+    // Check if the placement is valid (within the bounds of the board)
+    if (x < 0 || x >= 10 || y < 0 || y >= 10) {
+      console.error("Invalid placement coordinates.");
+      return false;
     }
+
+    // Check if there's enough space to place the ship based on its length and orientation
+    if (
+      (oriontation === "horizontal" && x + ship.length > 10) ||
+      (oriontation === "vertical" && y + ship.length > 10)
+    ) {
+      console.error("Not enough space to place the ship.");
+      return false;
+    }
+
+    // Check if there's already a ship at the specified coordinates
+    if (this.board[x][y].isContainShip) {
+      console.error("There's already a ship at the specified coordinates.");
+      return false;
+    }
+
+    // Place the ship on the board
+    for (let i = 0; i < ship.length; i++) {
+      if (oriontation === "horizontal") {
+        this.board[x + i][y].isContainShip = true;
+        ship.coordinates.push([x + i, y]);
+      } else {
+        this.board[x][y + i].isContainShip = true;
+        ship.coordinates.push([x, y + i]);
+      }
+    }
+
+    // Add the ship to the ships array
+    this.ships.push(ship);
+    return true;
   }
-
-  // Add the ship to the ships array
-  this.ships.push(ship);
-  return true;
-}
-
 
 /**
  * Receives an attack on the game board.
  *
  * @param {number} x - The x-coordinate of the attack.
  * @param {number} y - The y-coordinate of the attack.
- * @returns {boolean} - True if the attack hits a ship, false otherwise.
+ * @returns {boolean} - True if the attack is valid, false otherwise.
  */
- receiveAttack(x, y) {
+receiveAttack(x, y) {
   try {
-    // Check if the attack hits a ship
-    const isHit = board[x][y].isContainShip;
+    // Check if the attack coordinates are valid
+    const isValidAttack = this.isValidAttack(x, y);
 
-    // Mark the cell as attacked
-    board[x][y].isMarked = true;
+    if (!isValidAttack) {
+      console.error("Invalid attack coordinates.");
+      return false;
+    }
+
+    // Mark the cell as attacked and check if it's a hit
+    const isHit = this.markCellAsAttacked(x, y);
 
     if (isHit) {
-      // Code to handle a hit on a ship
-
-      // Find the ship that was hit
-      const hitShip = ships.find((ship) =>
-        ship.coordinates.some(([shipX, shipY]) => shipX === x && shipY === y)
-      );
-
-      // Update the hit count and check if the ship is sunk or record the missed attack
-      hitShip ? hitShip.hit() : null;
+      // Handle a hit on a ship
+      this.handleHitOnShip(x, y);
     } else {
-      // Code to handle a missed attack
-      board[x][y].isMissedAttack = true;
+      // Handle a missed attack
+      this.handleMissedAttack(x, y);
     }
+
+    return true;
   } catch (err) {
     console.error(err);
+    return false;
   }
-
-    return isHit;
 }
 
+isValidAttack(x, y) {
+  return x >= 0 && x < 10 && y >= 0 && y < 10 && !this.board[x][y].isMarked;
+}
+
+markCellAsAttacked(x, y) {
+  const isHit = this.board[x][y].isContainShip;
+  this.board[x][y].isMarked = true;
+  return isHit;
+}
+
+handleHitOnShip(x, y) {
+  const hitShip = this.findHitShip(x, y);
+  hitShip && hitShip.hit();
+}
+
+findHitShip(x, y) {
+  return this.ships.find((ship) =>
+    ship.coordinates.some(([shipX, shipY]) => shipX === x && shipY === y)
+  );
+}
+
+handleMissedAttack(x, y) {
+  this.board[x][y].isMissedAttack = true;
+}
   /**
    * Checks if all ships are sunk.
    * @returns {boolean} True if all ships are sunk, false otherwise.
    */
-   isAllShipsSunk() {
+  isAllShipsSunk() {
     // Use the `every` array method to check if every ship is sunk.
     return this.ships.every((ship) => ship.isSunk());
   }
 }
-
-
-
