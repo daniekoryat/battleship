@@ -1,18 +1,21 @@
-.gamestart-board {
+body {
+  background-color: #000080;
+  color: #D3D3D3;
+  text-align: center;
+  font-family: cursive;
+}
+.board {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.black {
-  background-color: black;
-}
 .boardcell {
   width: 25px;
   height: 25px;
-  background-color: white;
   border: 1px solid black;
+  cursor: crosshair;
 }
 
 .gamestart-container {
@@ -22,12 +25,6 @@
   justify-content: center;
   gap: 40px;
 }
-
-body {
-  background-color:beige
-}
-
-
 
 .button {
   display: inline-block;
@@ -53,4 +50,12 @@ body {
   background-color: #999999;
   color: #333333;
   cursor: not-allowed;
+}
+
+.main-game-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content:space-around;
+  height: 100vh; /* Adjust the height as needed */
 }

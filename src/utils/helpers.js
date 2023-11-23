@@ -4,7 +4,6 @@ import {
   alreadyContainShipError,
 } from "../exceptions";
 
-
 export function initialBoard() {
   const board = [];
 
@@ -21,8 +20,6 @@ export function initialBoard() {
 
   return board;
 }
-
-
 
 /**
  * Places a ship on the board at the specified coordinates and direction.
@@ -45,54 +42,52 @@ export function placeShipOnBoard(
   direction
 ) {
   const shipLength = shipData.length;
-  
-  
+
   // Check if the placement is valid (within the bounds of the board)
   if (
     rowIndex < 0 ||
     rowIndex >= board.length ||
     cellIndex < 0 ||
     cellIndex >= board[0].length
-    ) {
-      throw new invalidCordinateError();
-    }
-    
-    // Check if there's enough space to place the ship based on its length and direction
-    if (
-      (direction === "horizontal" && cellIndex + shipLength > board[0].length) ||
-      (direction === "vertical" && rowIndex + shipLength > board.length)
-      ) {
-        throw new notEnoughSpaceError();
-      }
-      
-      // Check if there's already a ship at the specified coordinates
-      for (let i = 0; i < shipLength; i++) {
-        if (
-      direction === "horizontal" &&
-      board[rowIndex][cellIndex + i].isContainShip
-      ) {
-        console.log("There's already a ship at the specified coordinates.");
-        return board;
-      } else if (
-        direction === "vertical" &&
-        board[rowIndex + i][cellIndex].isContainShip
-        ) {
-          throw new alreadyContainShipError();
-        }
-      }
+  ) {
+    throw new invalidCordinateError();
+  }
 
-      // Create a new board with the updated placement
-      const newBoard = JSON.parse(JSON.stringify(board));
-      
-      // Place the ship on the new board
-      for (let i = 0; i < shipLength; i++) {
-        if (direction === "horizontal") {
-          newBoard[rowIndex][cellIndex + i].isContainShip = true;
-        } else {
-          newBoard[rowIndex + i][cellIndex].isContainShip = true;
-        }
+  // Check if there's enough space to place the ship based on its length and direction
+  if (
+    (direction === "horizontal" && cellIndex + shipLength > board[0].length) ||
+    (direction === "vertical" && rowIndex + shipLength > board.length)
+  ) {
+    throw new notEnoughSpaceError();
+  }
+
+  // Check if there's already a ship at the specified coordinates
+  for (let i = 0; i < shipLength; i++) {
+    try {
+      if (
+        board[rowIndex][cellIndex + i].isContainShip ||
+        board[rowIndex + i][cellIndex].isContainShip
+      ) {
+        throw new alreadyContainShipError();
       }
-      
-      return newBoard;
+    } catch (error) {
+      console.error(error);
+      return board;
+            
     }
-    
+  }
+
+  // Create a new board with the updated placement
+  const newBoard = JSON.parse(JSON.stringify(board));
+
+  // Place the ship on the new board
+  for (let i = 0; i < shipLength; i++) {
+    if (direction === "horizontal") {
+      newBoard[rowIndex][cellIndex + i].isContainShip = true;
+    } else {
+      newBoard[rowIndex + i][cellIndex].isContainShip = true;
+    }
+  }
+
+  return newBoard;
+}

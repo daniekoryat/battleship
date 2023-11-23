@@ -9,15 +9,13 @@ export default function gameStartPage() {
   const [direction, setDirection] = useState("vertical");
   const playerBoard = useSelector((state) => state.game.player.board);
   const shipList = useSelector((state) => state.game.player.shipsToPlace);
-  const shipToPlace = shipList[0];
+  const shipToPlace = shipList ? shipList[0] : null;
   const dispatch = useDispatch();
 
   return (
     <>
       <h1>Place your ships</h1>
-      <h3>
-        ship: {shipToPlace.name} leangth: {shipToPlace.length}
-      </h3>
+      {shipToPlace ? <h3>ship: {shipToPlace.name} leangth: {shipToPlace.length}</h3> : <h3>all your ship is set</h3>}
       <h4
         onClick={() =>
           setDirection(direction === "vertical" ? "horizontal" : "vertical")
@@ -27,13 +25,13 @@ export default function gameStartPage() {
         Direction: {direction} (click to change)
       </h4>
       <div className="gamestart-container">
-        <BoardContainer playerBoard={playerBoard} shipToPlace={shipToPlace} />
+        <BoardContainer board={playerBoard} shipToPlace={shipToPlace} direction={direction} />
       </div>
       <br />
       <button
         className="button"
         onClick={() => dispatch(startGame())}
-        disabled={shipList.length !== 0}
+        disabled={shipToPlace ? true : false}
       >
         start game
       </button>

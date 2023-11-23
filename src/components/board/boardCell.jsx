@@ -19,7 +19,7 @@ const BoardCell = ({ isContainShip, isAttacked, isYellow }) => {
       color = "yellow";
       break;
     default:
-      color = "white";
+      color = "#1E90FF";
   }
 
   return <div className="boardcell" style={{ backgroundColor: color }}></div>;
