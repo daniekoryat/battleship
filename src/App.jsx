@@ -1,21 +1,19 @@
 import { useContext, useEffect } from "react";
-import GameContext, { GameContextProvider } from "./gameContext";
-import Player from "./factories/Player";
 import GameStartPage from "./components/pages/gameStartPage.jsx";
 import MainGamePage from "./components/pages/mainGamePage.jsx";
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
-  const { gameData, setGameData } = useContext(GameContext);
+  const isGameStarted = useSelector((state) => state.game.isGameStarted);
 
-  useEffect(() => {
-    setGameData({
-      player: new Player(false),
-      computer: new Player(true),
-      isGameStarted: false,
-    });
-  }, []);
 
-  return gameData.isGameStarted ? <MainGamePage /> : <GameStartPage />;
+
+  return isGameStarted ? (
+    <MainGamePage />
+  ) : (
+    <GameStartPage />
+  );
+
 }
 
 export default App;
