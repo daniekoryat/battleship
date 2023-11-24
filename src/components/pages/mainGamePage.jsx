@@ -7,9 +7,10 @@ export default function MainGamePage() {
 
   return (
     <>
+    <h1 className="main-game-title">battle!</h1>
       <div className="main-game-container">
-        <BoardContainer board={playerBoard} />
-        <BoardContainer board={computerBoard} />
+        <BoardContainer recivedBoard={playerBoard} />
+        <BoardContainer recivedBoard={computerBoard} />
       </div>
     </>
   );

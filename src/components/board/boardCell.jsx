@@ -1,28 +1,45 @@
 import React from "react";
-import { useState } from "react";
 
-const BoardCell = ({ isContainShip, isAttacked, isYellow }) => {
+const BoardCell = ({
+  isContainShip,
+  isAttacked,
+  hoverColor,
+  isPlayerBord,
+  isGameStart,
+}) => {
   let isSucsessfulAttack = isContainShip && isAttacked;
   let isMissedAttack = isContainShip && !isAttacked;
-  let color;
-  switch (true) {
-    case isSucsessfulAttack:
-      color = "red";
-      break;
-    case isContainShip:
-      color = "black";
-      break;
-    case isMissedAttack:
-      color = "red";
-      break;
-    case isYellow:
-      color = "yellow";
-      break;
-    default:
-      color = "#1E90FF";
-  }
 
-  return <div className="boardcell" style={{ backgroundColor: color }}></div>;
+  const style = {
+    backgroundColor: getColor(
+      isContainShip,
+      isSucsessfulAttack,
+      isMissedAttack,
+      hoverColor
+    ),
+    cursor: !isGameStart && isPlayerBord ? "default" : "crosshair",
+  };
+
+  return <div className="boardcell" style={style}></div>;
 };
+
+function getColor(
+  isContainShip,
+  isSuccessfulAttack,
+  isMissedAttack,
+  hoverColor
+) {
+  if (isContainShip) {
+    return "black";
+  } else if (isSuccessfulAttack) {
+    return "red";
+  } else if (isMissedAttack) {
+    return "green";
+  } else if (hoverColor) {
+    return hoverColor;
+  } else {
+    return "#1E90FF";
+  }
+}
 
 export default BoardCell;

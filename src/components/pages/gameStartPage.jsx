@@ -15,7 +15,13 @@ export default function gameStartPage() {
   return (
     <>
       <h1>Place your ships</h1>
-      {shipToPlace ? <h3>ship: {shipToPlace.name} leangth: {shipToPlace.length}</h3> : <h3>all your ship is set</h3>}
+      {shipToPlace ? (
+        <h3>
+          ship: {shipToPlace.name} leangth: {shipToPlace.length}
+        </h3>
+      ) : (
+        <h3>all your ship is set</h3>
+      )}
       <h4
         onClick={() =>
           setDirection(direction === "vertical" ? "horizontal" : "vertical")
@@ -25,10 +31,16 @@ export default function gameStartPage() {
         Direction: {direction} (click to change)
       </h4>
       <div className="gamestart-container">
-        <BoardContainer board={playerBoard} shipToPlace={shipToPlace} direction={direction} />
+        <BoardContainer
+          recivedBoard={playerBoard}
+          shipToPlace={shipToPlace}
+          direction={direction}
+          isGameStart={true}
+        />
       </div>
       <br />
       <button
+        type="button"
         className="button"
         onClick={() => dispatch(startGame())}
         disabled={shipToPlace ? true : false}
@@ -39,6 +51,4 @@ export default function gameStartPage() {
   );
 }
 
-{
-  /* <GamestartShips shipList={shipList} /> */
-}
+

@@ -63,17 +63,14 @@ export function placeShipOnBoard(
 
   // Check if there's already a ship at the specified coordinates
   for (let i = 0; i < shipLength; i++) {
-    try {
-      if (
-        board[rowIndex][cellIndex + i].isContainShip ||
-        board[rowIndex + i][cellIndex].isContainShip
-      ) {
+    if (direction === "horizontal") {
+      if (board[rowIndex][cellIndex + i].isContainShip) {
         throw new alreadyContainShipError();
       }
-    } catch (error) {
-      console.error(error);
-      return board;
-            
+    } else {
+      if (board[rowIndex + i][cellIndex].isContainShip) {
+        throw new alreadyContainShipError();
+      }
     }
   }
 
@@ -88,6 +85,6 @@ export function placeShipOnBoard(
       newBoard[rowIndex + i][cellIndex].isContainShip = true;
     }
   }
-
+  
   return newBoard;
 }
