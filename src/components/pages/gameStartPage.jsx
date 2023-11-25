@@ -1,9 +1,10 @@
-import BoardContainer from "../board/boardContainer";
-import GamestartShips from "../otherComponents/gametartShips";
-import { Button } from "bootstrap";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { startGame } from "../../actions/gameActions";
-import { useState } from "react";
+import {
+  startGame,
+  placeComputerShipsRandomly,
+} from "../../actions/gameActions";
+import BoardContainer from "../board/boardContainer";
 
 export default function gameStartPage() {
   const [direction, setDirection] = useState("vertical");
@@ -11,6 +12,10 @@ export default function gameStartPage() {
   const shipList = useSelector((state) => state.game.player.shipsToPlace);
   const shipToPlace = shipList ? shipList[0] : null;
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(placeComputerShipsRandomly());
+  }, []);
 
   return (
     <>
@@ -50,5 +55,3 @@ export default function gameStartPage() {
     </>
   );
 }
-
-
