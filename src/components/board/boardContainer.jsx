@@ -1,7 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { placeShip, hit } from "../../actions/gameActions";
-import { displayHoverColor, cleanHoverColor } from "../../utils/helpers";
+import {
+  displayHoverColor,
+  cleanHoverColor,
+  findValidCordinateForHitPlayer,
+} from "../../utils/helpers";
 import BoardCell from "./boardCell";
 
 export default function BoardContainer({
@@ -20,6 +24,13 @@ export default function BoardContainer({
   useEffect(() => {
     localBoardRef.current = recivedBoard;
     forceUpdate((n) => !n);
+  }, [recivedBoard]);
+
+  useEffect(() => {
+    if (!isPlayerBord && !isPlayerTurn) {
+      const [ rowIndex, cellIndex ] = findValidCordinateForHitPlayer();
+      dispatch(hit(true, rowIndex, cellIndex));
+    }
   }, [recivedBoard]);
 
   const handleMouseEnter = (rowIndex, cellIndex) => {

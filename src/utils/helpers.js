@@ -3,8 +3,7 @@ import {
   notEnoughSpaceError,
   alreadyContainShipError,
 } from "../exceptions";
-import { placeShip } from "../actions/gameActions";
-import { useSelector, useDispatch } from "react-redux";
+import store from "../store";
 
 /**
  * Generates the initial game board.
@@ -193,7 +192,7 @@ export function cleanHoverColor(
   }
 }
 
- const checkIfShipSunk = (ship) => {
+const checkIfShipSunk = (ship) => {
   return ship.hits === ship.length;
 };
 
@@ -206,4 +205,24 @@ export const isAllShipSunk = (ships) => {
     }
   });
   return isWinner;
+};
+
+/**
+ * Generates a valid coordinate for hitting a player on the game board.
+ *
+ * @return {Array} An array containing the row index and cell index of the valid coordinate.
+ */
+export const findValidCordinateForHitPlayer = () => {
+  const state = store.getState().game;
+  const { board } = state.player;
+
+  let rowIndex = getRandomInt(0, board.length);
+  let cellIndex = getRandomInt(0, board[0].length);
+
+  while (board[rowIndex][cellIndex].isAttacked) {
+    rowIndex = getRandomInt(0, board.length);
+    cellIndex = getRandomInt(0, board[0].length);
+  }
+
+  return [rowIndex, cellIndex];
 };

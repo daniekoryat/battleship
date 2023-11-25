@@ -54,10 +54,7 @@ function gameReducer(state = initialState, action) {
           ships: updatedShips,
         },
         winner,
-      };
-      return {
-        ...state,
-        winner: action.winner,
+        isPlayerTurn: !state.isPlayerTurn, 
       };
     default:
       return state;

@@ -11,7 +11,7 @@ const BoardCell = ({
   const isSuccsesfullHit = isContainShip && isAttacked;
   const isMissedHit = !isContainShip && isAttacked;
   const style = {
-    backgroundColor: getColor(isContainShip, isAttacked,hoverColor,isPlayerBord),
+    backgroundColor: getColor(isSuccsesfullHit, isMissedHit, isContainShip, hoverColor, isPlayerBord),
     cursor: !isGameStart && isPlayerBord ? "default" : "crosshair",
   };
 
@@ -29,14 +29,20 @@ function getColor(isSuccsesfullHit, isMissedHit, isContainShip, hoverColor, isPl
     else if (isContainShip) {
       return "black";
     }
+    else if (hoverColor) {
+      return hoverColor;
+    }
     else {
       return "#1E90FF";
     }
   } 
   else {
-    if (isSuccsesfullHit || isMissedHit) {
-      return "red";
+    if (isSuccsesfullHit) {
+      return "black";
     } 
+    else if (isMissedHit) {
+      return "green";
+    }
     else if (hoverColor) {
       return hoverColor;
     } 
