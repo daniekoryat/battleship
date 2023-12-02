@@ -54,7 +54,7 @@ export function placeShipOnBoard(
   //crate a copy of the ship data to no directly mutate the original ship data
   let ship = {
     ...shipData,
-    placementCordinates: [...shipData.placemeantCordinates],
+    placemeantCordinates: [...shipData.placemeantCordinates],
   };
 
   let shipLength = ship.length;
@@ -97,10 +97,10 @@ export function placeShipOnBoard(
   for (let i = 0; i < shipLength; i++) {
     if (direction === "horizontal") {
       newBoard[rowIndex][cellIndex + i].isContainShip = true;
-      ship.placementCordinates.push([rowIndex, cellIndex + i]);
+      ship.placemeantCordinates.push([rowIndex, cellIndex + i]);
     } else {
       newBoard[rowIndex + i][cellIndex].isContainShip = true;
-      ship.placementCordinates.push([rowIndex + i, cellIndex]);
+      ship.placemeantCordinates.push([rowIndex + i, cellIndex]);
     }
   }
 
@@ -216,13 +216,60 @@ export const findValidCordinateForHitPlayer = () => {
   const state = store.getState().game;
   const { board } = state.player;
 
-  let rowIndex = getRandomInt(0, board.length);
-  let cellIndex = getRandomInt(0, board[0].length);
+  let [rowIndex, cellIndex] = findAGoodAttackMoove(board);
 
-  while (board[rowIndex][cellIndex].isAttacked) {
-    rowIndex = getRandomInt(0, board.length);
-    cellIndex = getRandomInt(0, board[0].length);
+  if (rowIndex === null || cellIndex === null) {
+    while (!rowIndex || board[rowIndex][cellIndex].isAttacked) {
+      rowIndex = getRandomInt(0, board.length);
+      cellIndex = getRandomInt(0, board[0].length);
+    }
   }
 
   return [rowIndex, cellIndex];
 };
+
+function findAGoodAttackMoove(board) {
+  var hitCell = null;
+
+  for (let rowIndex = 0; rowIndex < board.length; rowIndex++) {
+    for (let cellIndex = 0; cellIndex < board[0].length; cellIndex++) {
+      if (
+        board[rowIndex][cellIndex].isAttacked &&
+        board[rowIndex][cellIndex].isContainShip
+      ) {
+        // Store the cell that was hit
+        hitCell = [rowIndex, cellIndex];
+        break;
+      }
+    }
+    if (hitCell) break;
+  }
+
+  if (hitCell) {
+    // If a ship was hit, continue attacking the surrounding cells
+    const [rowToHit, cellToHit] = hitCell;
+    const cellsToAttack = [
+      [rowToHit - 1, cellToHit],
+      [rowToHit + 1, cellToHit],
+      [rowToHit, cellToHit - 1],
+      [rowToHit, cellToHit + 1],
+    ];
+
+    // Loop over the cells to attack and attack if they are on the board and not already attacked
+    for (const [rowIndex, cellIndex] of cellsToAttack) {
+      if (
+        rowIndex >= 0 &&
+        rowIndex < board.length &&
+        cellIndex >= 0 &&
+        cellIndex < board[0].length &&
+        !board[rowIndex][cellIndex].isAttacked
+      ) {
+        return [rowIndex, cellIndex];
+      }
+    }
+  }
+  return [null, null];
+}
+
+
+

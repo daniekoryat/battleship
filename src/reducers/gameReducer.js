@@ -1,6 +1,6 @@
 // Importing necessary functions and constants from other files
 import { initialBoard } from "../utils/helpers";
-import { START_GAME, PLACE_SHIP } from "../actions/actionTypes";
+import { START_GAME, PLACE_SHIP,HIT,RESET_GAME } from "../actions/actionTypes";
 import shipList from "../utils/shipList";
 
 // Defining the initial state of the game
@@ -43,7 +43,7 @@ function gameReducer(state = initialState, action) {
           shipsToPlace: updatedShipsToPlace,
         },
       };
-    case "HIT":
+    case HIT:
       const { updatedHittedBord, updatedShips, winner, isComputerHitted } =
         action;
       return {
@@ -56,6 +56,8 @@ function gameReducer(state = initialState, action) {
         winner,
         isPlayerTurn: !state.isPlayerTurn, 
       };
+    case RESET_GAME:
+      return initialState;
     default:
       return state;
   }

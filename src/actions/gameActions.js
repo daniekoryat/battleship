@@ -1,9 +1,10 @@
-import { START_GAME, PLACE_SHIP } from "./actionTypes";
+import { START_GAME, PLACE_SHIP, HIT, RESET_GAME } from "./actionTypes";
 import {
   placeShipOnBoard,
   getRandomInt,
   isAllShipSunk,
 } from "../utils/helpers";
+
 
 export const startGame = () => ({
   type: START_GAME,
@@ -114,8 +115,8 @@ export const hit = (isComputerTheHitter, rowIndex, cellIndex) => {
     const opponnentShips = [...ships];
 
     const { board } = state[isComputerTheHitter ? "player" : "computer"];
-    const updatedBoard = board.map((row,i) => {
-      return row.map((cell,j) => {
+    const updatedBoard = board.map((row, i) => {
+      return row.map((cell, j) => {
         if (i === rowIndex && j === cellIndex) {
           return {
             ...cell,
@@ -131,7 +132,11 @@ export const hit = (isComputerTheHitter, rowIndex, cellIndex) => {
     var isShipHited = false;
 
     const updatedShips = opponnentShips.map((ship) => {
-      if (ship.placemeantCordinates.includes([rowIndex, cellIndex])) {
+      if (
+        ship.placemeantCordinates.some(
+          ([y, x]) => y === rowIndex && x === cellIndex
+        )
+      ) {
         isShipHited = true;
         return {
           ...ship,
@@ -142,18 +147,24 @@ export const hit = (isComputerTheHitter, rowIndex, cellIndex) => {
     });
 
     const isAllOppenentShipsSunk = isAllShipSunk(updatedShips);
-    const winner = isAllOppenentShipsSunk
-      ? isComputerTheHitter
-        ? "player"
-        : "computer"
-      : null;
+    let winner = null;
+
+    if (isAllOppenentShipsSunk) {
+      winner = isComputerTheHitter ? "computer" : "player";
+    }
 
     dispatch({
-      type: "HIT",
+      type: HIT,
       updatedHittedBord: updatedBoard,
       isComputerHitted: isComputerTheHitter,
       updatedShips,
       winner,
     });
+  };
+};
+
+export const resetGame = () => {
+  return (dispatch) => {
+    dispatch({ type: RESET_GAME });
   };
 };

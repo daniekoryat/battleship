@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import BoardContainer from "../board/boardContainer";
+import GameEndPage from "./gameEndPage";
 
 export default function MainGamePage() {
   const playerBoard = useSelector((state) => state.game.player.board);
@@ -7,7 +8,7 @@ export default function MainGamePage() {
   const winner = useSelector((state) => state.game.winner);
 
   return winner ? (
-    <h1 className="main-game-title">The winner is {winner}!</h1>
+    <GameEndPage winner={winner} />
   ) : (
     <>
       <h1 className="main-game-title">battle!</h1>
