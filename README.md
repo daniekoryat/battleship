@@ -23,7 +23,7 @@ Before running the project, make sure you have [Node.js](https://nodejs.org/) in
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/worships.git
+git clone https://github.com/danielkoryat/battleship.git
 cd worships
 ```
 
@@ -38,7 +38,7 @@ npm install
 To start the game, run:
 
 ```
-npm start
+npm run dev
 ```
 
 This will run the app in development mode. Open **http://localhost:3000** to view it in the browser.
