@@ -1,4 +1,3 @@
-Here is the text formatted with Markdown:
 
 # Worships 
 
