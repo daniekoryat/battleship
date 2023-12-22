@@ -9,14 +9,14 @@ const initialState = {
   isPlayerTurn: true,
   winner: null,
   player: {
-    board: initialBoard(), // Setting the player's board using the initialBoard function
-    ships: [], // Initializing the player's ships array
-    shipsToPlace: [...shipList], // Setting the player's shipsToPlace array to a copy of the shipList array
+    board: initialBoard(), 
+    ships: [],
+    shipsToPlace: [...shipList],
   },
   computer: {
-    board: initialBoard(), // Setting the computer's board using the initialBoard function
-    ships: [], // Initializing the computer's ships array
-    shipsToPlace: [...shipList], // Setting the computer's shipsToPlace array to a copy of the shipList array
+    board: initialBoard(), 
+    ships: [], 
+    shipsToPlace: [...shipList], 
   },
 };
 
